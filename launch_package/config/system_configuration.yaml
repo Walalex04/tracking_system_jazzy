@@ -1,0 +1,10 @@
+
+
+camera_width: 1280
+camera_height: 720
+num_robots: 4
+ROS_MASTER_URI: "192.168.0.103"
+ROS_IP: "192.168.0.103"
+port_comunication_dev: "/dev/ttyUSB0"
+com_baut: 115200
+
