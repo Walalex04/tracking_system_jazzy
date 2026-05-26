@@ -57,6 +57,9 @@ install(TARGETS
   DESTINATION lib/${PROJECT_NAME}
 )
 
-
+install(
+  DIRECTORY config/
+  DESTINATION share/${PROJECT_NAME}/config
+)
 
 ament_package()

@@ -41,6 +41,11 @@ def generate_launch_description():
     cropper_config = os.path.join(cropper_package, "config", "config_cropper.yaml")
     
 
+    #-------------
+    # config transformer
+    #--------------
+    tracker_package = get_package_share_directory("tracker_rgb_package")
+    transformer_config = os.path.join(cropper_package, "config", "_transformer.yaml")
 
     return LaunchDescription([
         Node(
@@ -66,15 +71,16 @@ def generate_launch_description():
             parameters=[cropper_config]
         ),
         Node(
-            package="tracker_package",
-            executable="tracker_node",
-            name="trackerNode",
+            package="tracker_rgb_package",
+            executable="tracker_node_RGB",
+            name="trackerNodeRGB",
             output="screen"
         ),
         Node(
-            package="tracker_package",
-            executable="transformer_node",
-            name="transformerNode",
-            output="screen"
+            package="tracker_rgb_package",
+            executable="transformer_node_RGB",
+            name="transformerNodeRGB",
+            output="screen",
+            parameters=[transformer_config]
         )
     ])

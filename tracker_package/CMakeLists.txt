@@ -93,6 +93,12 @@ install(TARGETS
 )
 
 
+install(
+  DIRECTORY config/
+  DESTINATION share/${PROJECT_NAME}/config
+)
+
+
 
 # Export para runtime de mensajes
 ament_export_dependencies(rosidl_default_runtime)
