@@ -23,6 +23,8 @@
   <depend>cv_bridge</depend>
   <depend>tf2_geometry_msgs</depend>
 
+  <depend>visualization_msgs</depend>
+  
   <!-- Añadimos tracker_package como dependencia para poder usar sus mensajes -->
   <depend>tracker_package</depend>
 

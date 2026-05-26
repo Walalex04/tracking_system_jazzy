@@ -9,6 +9,7 @@
 #include <map>
 #include <sstream>
 #include <tracker_package/msg/robot_info.hpp>
+#include <visualization_msgs/msg/marker.hpp>
 
 using std::placeholders::_1;
 
@@ -23,18 +24,25 @@ public:
 
     Transformer() : Node("transformer_node")
     {
-        sub_tracker_ = this->create_subscription<std_msgs::msg::UInt32MultiArray>(
-            "tracker/positions_stamped", 20, std::bind(&Transformer::transformerCallback, this, _1));
 
         this->declare_parameter("x_offset", 0.0);
         this->declare_parameter("y_offset", 0.0);
         this->declare_parameter("angular_offset", 0.0);
         this->declare_parameter("scale_factor", 1.0);
 
-        transformer.x_offset = this->get_parameter("x_offset").as_double();
-        transformer.y_offset = this->get_parameter("y_offset").as_double();
-        transformer.angular_offset = this->get_parameter("angular_offset").as_double();
-        transformer.scale_factor = this->get_parameter("scale_factor").as_double();
+        this->get_parameter("x_offset", transformer.x_offset);
+        this->get_parameter("y_offset", transformer.y_offset);
+        this->get_parameter("angular_offset", transformer.angular_offset);
+        this->get_parameter("scale_factor", transformer.scale_factor);
+
+        RCLCPP_INFO(this->get_logger(), "Parametros cargados: X:%f, Y:%f, Scale:%f",
+                    transformer.x_offset, transformer.y_offset, transformer.scale_factor);
+
+        // En el constructor:
+        marker_pub_ = this->create_publisher<visualization_msgs::msg::Marker>("tracker/robot_markers", 10);
+
+        sub_tracker_ = this->create_subscription<std_msgs::msg::UInt32MultiArray>(
+            "tracker/positions_stamped", 20, std::bind(&Transformer::transformerCallback, this, _1));
 
         br_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
     }
@@ -107,7 +115,7 @@ private:
             q.setRPY(0, 0, yaw);
             robot_pose_msg.pose.pose.orientation = tf2::toMsg(q);
 
-            // TF
+            // TF ---------------------------------------------------
             geometry_msgs::msg::TransformStamped t;
             t.header.stamp = robot_pose_msg.header.stamp;
             t.header.frame_id = "camera_optical_frame";
@@ -116,6 +124,52 @@ private:
             t.transform.translation.y = pose_y;
             t.transform.rotation = robot_pose_msg.pose.pose.orientation;
             br_->sendTransform(t);
+
+            // MARKER ------------------------------------------------------------------
+            visualization_msgs::msg::Marker marker;
+            marker.header.frame_id = "camera_optical_frame";
+            marker.header.stamp = this->now();
+            marker.ns = "robot_colors";
+            marker.id = robot_id; // Cada robot tiene su propio marcador
+            marker.type = visualization_msgs::msg::Marker::SPHERE;
+            marker.action = visualization_msgs::msg::Marker::ADD;
+
+            // Posición igual a la del robot
+            marker.pose.position.x = pose_x;
+            marker.pose.position.y = pose_y;
+            marker.pose.position.z = 0.0;
+            marker.scale.x = 0.1; // Diámetro del punto
+            marker.scale.y = 0.1;
+            marker.scale.z = 0.1;
+
+            // Lógica de color dinámica
+            marker.color.a = 1.0; // Opacidad total
+            if (color_code == 1)
+            { // Azul
+                marker.color.r = 0.0;
+                marker.color.g = 0.0;
+                marker.color.b = 1.0;
+            }
+            else if (color_code == 2)
+            { // Verde
+                marker.color.r = 0.0;
+                marker.color.g = 1.0;
+                marker.color.b = 0.0;
+            }
+            else if (color_code == 3)
+            { // Rojo
+                marker.color.r = 1.0;
+                marker.color.g = 0.0;
+                marker.color.b = 0.0;
+            }
+            else
+            { // Desconocido/Default (Gris)
+                marker.color.r = 0.5;
+                marker.color.g = 0.5;
+                marker.color.b = 0.5;
+            }
+
+            marker_pub_->publish(marker);
 
             // RobotInfo
             tracker_package::msg::RobotInfo robot_info_msg;
@@ -145,6 +199,8 @@ private:
 
     rclcpp::Subscription<std_msgs::msg::UInt32MultiArray>::SharedPtr sub_tracker_;
     std::shared_ptr<tf2_ros::TransformBroadcaster> br_;
+
+    rclcpp::Publisher<visualization_msgs::msg::Marker>::SharedPtr marker_pub_;
 };
 
 int main(int argc, char **argv)

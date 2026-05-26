@@ -37,7 +37,7 @@ public:
         cv::circle(mask_roi, center, radius, cv::Scalar(255), -1);
 
         // Definir rangos HSV [Azul, Verde, Rojo]
-        // NOTA: Ajusta estos valores según la iluminación real de tu entorno
+
         std::vector<cv::Scalar> lower = {{109, 68, 213}, {56, 68, 213}, {168, 68, 213}};
         std::vector<cv::Scalar> upper = {{119, 255, 255}, {75, 255, 255}, {225, 255, 255}};
 

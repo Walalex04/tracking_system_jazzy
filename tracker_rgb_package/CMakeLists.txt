@@ -19,6 +19,8 @@ find_package(tracker_package REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
 
+find_package(visualization_msgs REQUIRED)
+
 find_package(OpenCV REQUIRED)
 find_package(cv_bridge REQUIRED)
 
@@ -57,6 +59,7 @@ ament_target_dependencies(transformer_node_RGB
   tf2_ros
   tf2_geometry_msgs
   tracker_package
+  visualization_msgs
 )
 
 
@@ -71,6 +74,13 @@ install(TARGETS
   transformer_node_RGB
   DESTINATION lib/${PROJECT_NAME}
 )
+
+
+install(
+  DIRECTORY config/
+  DESTINATION share/${PROJECT_NAME}/config
+)
+
 
 # Instalación de archivos de launch o configuración si los tuvieras
 # install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})

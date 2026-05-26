@@ -45,7 +45,7 @@ def generate_launch_description():
     # config transformer
     #--------------
     tracker_package = get_package_share_directory("tracker_rgb_package")
-    transformer_config = os.path.join(cropper_package, "config", "_transformer.yaml")
+    transformer_config = os.path.join(tracker_package, "config", "transformer.yaml")
 
     return LaunchDescription([
         Node(
