@@ -20,6 +20,7 @@ def generate_launch_description():
 
     camera_width = config['camera_width']
     camera_height = config['camera_height']
+    camera_index = config.get('camera_index', 0)
 
     print(f"The configuration of the camera is {camera_width} and {camera_height}")
 
@@ -49,7 +50,8 @@ def generate_launch_description():
             name="cameraNode",
             output="screen",
             parameters=[{
-                'camera_info_url': f'file://{camera_info}'
+                'camera_info_url': f'file://{camera_info}',
+                'camera_index': camera_index
             }]
         ), 
         Node(

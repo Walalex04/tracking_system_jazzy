@@ -20,10 +20,16 @@ def generate_launch_description():
 
     camera_width = config['camera_width']
     camera_height = config['camera_height']
+    camera_index = config.get('camera_index', 0)
 
     print(f"The configuration of the camera is {camera_width} and {camera_height}")
 
     camera_package = get_package_share_directory("camera_package")  
+
+
+    robots = config["robots_avalaibles"]
+    id_per_robots = config["associate_id"]
+
 
     
     camera_info = os.path.join(
@@ -54,14 +60,16 @@ def generate_launch_description():
             name="cameraNode",
             output="screen",
             parameters=[{
-                'camera_info_url': f'file://{camera_info}'
+                'camera_info_url': f'file://{camera_info}',
+                'camera_index': camera_index
             }]
         ), 
         Node(
             package='image_proc',
             executable='rectify_node',
             name='rectify',
-            output='screen'
+            output='screen',
+        
         ),
         Node(
             package="cropper_package",
@@ -74,13 +82,19 @@ def generate_launch_description():
             package="tracker_rgb_package",
             executable="tracker_node_RGB",
             name="trackerNodeRGB",
-            output="screen"
+            output="screen",
+            parameters=[{
+                "robots": robots,
+                "id_robots": id_per_robots
+            }]
         ),
         Node(
             package="tracker_rgb_package",
             executable="transformer_node_RGB",
             name="transformerNodeRGB",
             output="screen",
-            parameters=[transformer_config]
+            parameters=[transformer_config, 
+                {"robots": robots,
+                "id_robots": id_per_robots}]
         )
     ])

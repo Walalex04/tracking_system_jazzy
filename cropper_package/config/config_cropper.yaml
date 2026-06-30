@@ -1,3 +1,16 @@
+# /**:
+#   ros__parameters:
+#     point_0: [301, 108]
+#     point_1: [301, 108]
+#     point_2: [302, 107]
+#     point_3: [368, 8]
+#     point_4: [640, 11]
+#     point_5: [708, 90]
+#     point_6: [718, 613]
+#     point_7: [651, 715]
+#     point_8: [401, 718]
+#     point_9: [300, 640]
+#     point_10: [303, 115]
 /**:
   ros__parameters:
     point_0: [267, 83]

@@ -38,7 +38,7 @@ public:
 
         // Definir rangos HSV [Azul, Verde, Rojo]
 
-        std::vector<cv::Scalar> lower = {{109, 68, 213}, {56, 68, 213}, {168, 68, 213}};
+        std::vector<cv::Scalar> lower = {{109, 68, 213}, {56, 68, 213}, {170, 68, 213}};
         std::vector<cv::Scalar> upper = {{119, 255, 255}, {75, 255, 255}, {225, 255, 255}};
 
         int best_color = 0;

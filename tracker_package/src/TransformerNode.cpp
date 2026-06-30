@@ -9,7 +9,6 @@
 #include <map>
 #include <sstream>
 
-
 #include <tracker_package/msg/robot_info.hpp>
 
 using std::placeholders::_1;
@@ -71,7 +70,7 @@ private:
                 if (transformer.info_publishers.count(robot_id) == 0)
                 {
                     std::stringstream topic_info;
-                    topic_info << "/epuck_" << robot_id << "/odom";
+                    topic_info << "/qupa_" << robot_id << "/odom";
 
                     transformer.info_publishers[robot_id] =
                         this->create_publisher<tracker_package::msg::RobotInfo>(topic_info.str(), 10);

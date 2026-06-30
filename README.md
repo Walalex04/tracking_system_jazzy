@@ -22,7 +22,7 @@ For the correct executing, ensure you have the following resources
                      ros-jazzy-cv-bridge
                      ros-jazzy-camera-info-manager
                      ros-jazzy-image-pipeline
-                     
+                     ros-jazzy-marker-msgs
     ```
     The first two libreries are used for **openCV** and **cv_brdige**, see the principal documentation for more detaill [CV_Bride](https://index.ros.org/p/cv_bridge/#jazzy)
 

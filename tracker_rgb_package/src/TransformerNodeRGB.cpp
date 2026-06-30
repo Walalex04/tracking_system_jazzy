@@ -35,6 +35,12 @@ public:
         this->get_parameter("angular_offset", transformer.angular_offset);
         this->get_parameter("scale_factor", transformer.scale_factor);
 
+        this->declare_parameter<std::vector<std::string>>("robots", std::vector<std::string>());
+        this->declare_parameter<std::vector<int64_t>>("id_robots", std::vector<int64_t>());
+
+        robots_ = this->get_parameter("robots").as_string_array();
+        id_robots_ = this->get_parameter("id_robots").as_integer_array();
+
         RCLCPP_INFO(this->get_logger(), "Parametros cargados: X:%f, Y:%f, Scale:%f",
                     transformer.x_offset, transformer.y_offset, transformer.scale_factor);
 
@@ -68,13 +74,22 @@ private:
                 break;
             }
 
-            int robot_id = static_cast<int>(msg->data.at(i));
+            int robot_id = static_cast<int64_t>(msg->data.at(i));
             int color_code = static_cast<int>(msg->data.at(i + 9));
+
+            auto it = std::find(id_robots_.begin(), id_robots_.end(), robot_id);
+
+            if (it == id_robots_.end())
+            {
+                continue;
+            }
 
             if (transformer.info_publishers.count(robot_id) == 0)
             {
+                int indice = std::distance(id_robots_.begin(), it);
+
                 std::stringstream topic_info;
-                topic_info << "/epuck_" << robot_id << "/odom";
+                topic_info << "/qupa_" << robots_[indice] << "/odom";
                 transformer.info_publishers[robot_id] = this->create_publisher<tracker_package::msg::RobotInfo>(topic_info.str(), 10);
                 RCLCPP_INFO(this->get_logger(), "Publicador creado para ID: %d", robot_id);
             }
@@ -201,6 +216,8 @@ private:
     std::shared_ptr<tf2_ros::TransformBroadcaster> br_;
 
     rclcpp::Publisher<visualization_msgs::msg::Marker>::SharedPtr marker_pub_;
+    std::vector<std::string> robots_;
+    std::vector<int64_t> id_robots_;
 };
 
 int main(int argc, char **argv)

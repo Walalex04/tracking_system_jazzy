@@ -14,9 +14,13 @@ public:
                    
     {
         this->declare_parameter<std::string>("camera_info_url", "");
+        this->declare_parameter<int>("camera_index", 0);
 
         std::string camera_info_url;
         this->get_parameter("camera_info_url", camera_info_url);
+
+        int camera_index;
+        this->get_parameter("camera_index", camera_index);
 
             // Load calibration
         if (!camera_info_url.empty()) {
@@ -30,7 +34,7 @@ public:
             RCLCPP_WARN(this->get_logger(), "No camera_info_url provided");
         }
 
-        cap = cv::VideoCapture(0, cv::CAP_V4L2);
+        cap = cv::VideoCapture(camera_index, cv::CAP_V4L2);
         image_pub_ = this->create_publisher<sensor_msgs::msg::Image>("/image", 10);
         camera_info_pub_ = this->create_publisher<sensor_msgs::msg::CameraInfo>("/camera_info", 10);
 

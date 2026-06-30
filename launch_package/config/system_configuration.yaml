@@ -2,9 +2,12 @@
 
 camera_width: 1280
 camera_height: 720
-num_robots: 4
+camera_index: 0
+num_robots: 7
 ROS_MASTER_URI: "192.168.0.103"
 ROS_IP: "192.168.0.103"
 port_comunication_dev: "/dev/ttyUSB0"
 com_baut: 115200
 
+robots_avalaibles: ["AE", "7E", "C0", "F7", "48", "D2", "AF"]
+associate_id: [19,17,14,18,15,11,12]
