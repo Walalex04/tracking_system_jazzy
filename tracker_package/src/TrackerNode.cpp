@@ -26,11 +26,11 @@ public:
         this->declare_parameter<bool>("tracker.crop", false);
         bool crop = this->get_parameter("tracker.crop").as_bool();
 
-        std::string topic_name = crop ? "image_cropped" : "/image";
+        std::string topic_name = crop ? "/image_cropped" : "/image_rect";
 
         // Subscriber
         image_sub_ = this->create_subscription<sensor_msgs::msg::Image>(
-            topic_name,
+            "/image_cropped",
             20,
             std::bind(&Tracker::imageCb, this, _1));
 

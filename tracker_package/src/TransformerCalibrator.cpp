@@ -56,11 +56,11 @@ private:
     bool done;
 
     // TAGS
-    const int center_tag = 13;
+    const int center_tag = 15;
     const int tag_tr = 14;
-    const int tag_tl = 17;
-    const int tag_bl = 18;
-    const int tag_br = 19;
+    const int tag_tl = 11;
+    const int tag_bl = 17;
+    const int tag_br = 12;
 
     void calibratorCallback(const std_msgs::msg::UInt32MultiArray::SharedPtr msg)
     {
@@ -106,7 +106,7 @@ private:
                 angular_offset += (orientation - 0.0) / 2.0;
 
                 double size = std::sqrt(std::pow(y2 - y1, 2) + std::pow(x2 - x1, 2));
-                scale_factor += (1.75 / size) / 2.0;
+                scale_factor += (1.32 / size) / 2.0;
             }
 
             // Vertical
@@ -120,7 +120,7 @@ private:
                 angular_offset += (orientation - M_PI_2) / 2.0;
 
                 double size = std::sqrt(std::pow(y2 - y1, 2) + std::pow(x2 - x1, 2));
-                scale_factor += (1.37 / size) / 2.0;
+                scale_factor += (1.29 / size) / 2.0;
             }
 
             // Guardar YAML

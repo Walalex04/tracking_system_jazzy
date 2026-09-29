@@ -1,7 +1,6 @@
 /**:
   ros__parameters:
-    x_offset : -328.0
-    y_offset : 310.75
-    angular_offset : -3.12509
-    scale_factor : 0.00327655
-
+    x_offset : -671.75
+    y_offset : 369.0
+    angular_offset : -3.12283
+    scale_factor : 0.00300107
